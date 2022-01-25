@@ -2,9 +2,18 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
-public class myUDPServer {
-    public myUDPServer(String serverName, int port) {
+public class UDPServer extends Thread{
+    String serverName;
+    int port;
+    public UDPServer(String serverName, int port) {
+        this.serverName = serverName;
+        this.port = port;
+    }
+
+    public void run(){
+        super.run();
         DatagramSocket dataSocket;
+
         try {
             dataSocket = new DatagramSocket(port);
             byte[] receive = new byte[4096];
@@ -15,7 +24,7 @@ public class myUDPServer {
                 // revive the data in byte buffer.
                 dataSocket.receive(DpReceive);
 
-                System.out.println(serverName + "got message:" + data(receive));
+                System.out.println(serverName + "_UDP got message:" + data(receive));
 
                 if (data(receive).toString().equals("message")) {
                     System.out.println("Client sent bye.....EXITING");

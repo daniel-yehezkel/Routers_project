@@ -1,12 +1,11 @@
 import java.io.DataInputStream;
 import java.net.Socket;
-import java.util.Arrays;
 
-public class myTCPServerThread extends Thread {
+public class TCPServerThread extends Thread {
     private final String _serverName;
     private final Socket _socket;
 
-    public myTCPServerThread(String serverName, Socket socket) {
+    public TCPServerThread(String serverName, Socket socket) {
         _serverName = serverName;
         _socket = socket;
     }

@@ -2,8 +2,16 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class myTCPServer {
-    public myTCPServer(String serverName, int port) {
+public class TCPServer extends Thread{
+    String serverName;
+    int port;
+
+    public TCPServer(String serverName, int port) {
+        this.serverName = serverName;
+        this.port = port;
+    }
+    public void run(){
+        super.run();
         ServerSocket serverSocket;
         Socket socket = null;
 
@@ -13,7 +21,7 @@ public class myTCPServer {
                     " is up and waiting for connections on port " + port + "...");
             while (true) {
                 socket = serverSocket.accept();
-                new myTCPServerThread(serverName, socket).start();
+                new TCPServerThread(serverName, socket).start();
             }
         } catch (IOException e) {
             e.printStackTrace();

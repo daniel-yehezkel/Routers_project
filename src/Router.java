@@ -14,8 +14,8 @@ public class Router extends Thread {
     String forwardingFilePrefix;
     Map<Integer, Neighbor> neighborsProperties = new HashMap<>();
     RoutingTable routingTable;
-    myTCPServer myTcpServer;
-    myUDPServer myUdpServer;
+    TCPServer myTcpServer;
+    UDPServer myUdpServer;
 
     public Router(int name, String inputFilePrefix, String tableFilePrefix, String
             forwardingFilePrefix) {
@@ -62,12 +62,18 @@ public class Router extends Thread {
     @Override
     public void run() {
         super.run();
-        this.myTcpServer = new myTCPServer("Router " + this.routerName, this.portTCP);
-        this.myUdpServer = new myUDPServer("Router " + this.routerName, this.portUDP);
+        this.myTcpServer = new TCPServer("Router " + this.routerName, this.portTCP);
+        this.myTcpServer.start();
+        this.myUdpServer = new UDPServer("Router " + this.routerName, this.portUDP);
+        this.myUdpServer.start();
     }
 
-    public void sendMessageToNeighbor(String ip, int port, String message) {
-        new myTCPSendMessage("Router " + this.routerName, ip, port, message).start();
+    public void sendMessageToNeighborTCP(String ip, int port, String message) {
+        new TCPSendMessage("Router " + this.routerName, ip, port, message).start();
+    }
+
+    public void sendMessageToNeighborUDP(String ip, int port, String message) {
+        new UDPSendMessage("Router " + this.routerName, ip, port, message);
     }
 }
 

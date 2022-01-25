@@ -1,14 +1,13 @@
 import java.io.DataOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 
-public class myTCPSendMessage extends Thread {
+public class TCPSendMessage extends Thread {
     private final String _fromRouterName;
     private final String _toIP;
     private final int _toPort;
     private final String _message;
 
-    public myTCPSendMessage(String fromRouterName, String toIP, int toPort, String message) {
+    public TCPSendMessage(String fromRouterName, String toIP, int toPort, String message) {
         _fromRouterName = fromRouterName;
         _toIP = toIP;
         _toPort = toPort;
@@ -28,14 +27,10 @@ public class myTCPSendMessage extends Thread {
     private void handleWrite() throws Exception {
         Socket socket = new Socket(_toIP, _toPort);
         DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-//        PrintWriter output = new PrintWriter(socket.getOutputStream());
 
 
         System.out.println(_fromRouterName + " Sending " + _message + " to server: " + socket.getInetAddress().toString()
                 + ":" + socket.getPort());
-//        output.println(_message);
-//        output.writeChars(msg1);
-        //output.writeInt(_message);
         output.writeBytes(_message);
 
         output.close();
