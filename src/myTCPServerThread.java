@@ -24,7 +24,7 @@ public class myTCPServerThread extends Thread {
         DataInputStream input = new DataInputStream(_socket.getInputStream());
 
         int num = input.readInt();
-        System.out.println(_serverName + " Received message: " + num);
+        System.out.println(_serverName + "_TCP Received message: " + num);
 
         input.close();
         _socket.close();

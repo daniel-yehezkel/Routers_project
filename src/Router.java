@@ -10,14 +10,20 @@ public class Router extends Thread {
     int portUDP;
     int portTCP;
     int numNetRouters;
+    String tableFilePrefix;
+    String forwardingFilePrefix;
     Map<Integer, Neighbor> neighborsProperties = new HashMap<>();
     RoutingTable routingTable;
     myTCPServer myTcpServer;
+    myUDPServer myUdpServer;
 
     public Router(int name, String inputFilePrefix, String tableFilePrefix, String
             forwardingFilePrefix) {
         this.myTcpServer = null;
+        this.myUdpServer= null;
         this.routerName = name;
+        this.tableFilePrefix = tableFilePrefix;
+        this.forwardingFilePrefix = forwardingFilePrefix;
 
         File inputFile = new File("text_files\\" + inputFilePrefix + ".txt"); //TODO: no 'text_files' in production
         try {
@@ -57,6 +63,7 @@ public class Router extends Thread {
     public void run() {
         super.run();
         this.myTcpServer = new myTCPServer("Router " + this.routerName, this.portTCP);
+        this.myUdpServer = new myUDPServer("Router " + this.routerName, this.portUDP);
     }
 
     public void sendMessageToNeighbor(String ip, int port, int message) {
