@@ -1,5 +1,6 @@
 import java.io.DataInputStream;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class myTCPServerThread extends Thread {
     private final String _serverName;
@@ -23,8 +24,8 @@ public class myTCPServerThread extends Thread {
     private void handleRead() throws Exception {
         DataInputStream input = new DataInputStream(_socket.getInputStream());
 
-        int num = input.readInt();
-        System.out.println(_serverName + "_TCP Received message: " + num);
+        String msg = new String(input.readAllBytes());
+        System.out.println(_serverName + "_TCP Received message: " + msg);
 
         input.close();
         _socket.close();

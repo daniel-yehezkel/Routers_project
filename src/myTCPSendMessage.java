@@ -6,9 +6,9 @@ public class myTCPSendMessage extends Thread {
     private final String _fromRouterName;
     private final String _toIP;
     private final int _toPort;
-    private final int _message;
+    private final String _message;
 
-    public myTCPSendMessage(String fromRouterName, String toIP, int toPort, int message) {
+    public myTCPSendMessage(String fromRouterName, String toIP, int toPort, String message) {
         _fromRouterName = fromRouterName;
         _toIP = toIP;
         _toPort = toPort;
@@ -30,10 +30,13 @@ public class myTCPSendMessage extends Thread {
         DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 //        PrintWriter output = new PrintWriter(socket.getOutputStream());
 
+
         System.out.println(_fromRouterName + " Sending " + _message + " to server: " + socket.getInetAddress().toString()
                 + ":" + socket.getPort());
 //        output.println(_message);
-        output.writeInt(_message);
+//        output.writeChars(msg1);
+        //output.writeInt(_message);
+        output.writeBytes(_message);
 
         output.close();
         socket.close();

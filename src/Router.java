@@ -66,7 +66,7 @@ public class Router extends Thread {
         this.myUdpServer = new myUDPServer("Router " + this.routerName, this.portUDP);
     }
 
-    public void sendMessageToNeighbor(String ip, int port, int message) {
+    public void sendMessageToNeighbor(String ip, int port, String message) {
         new myTCPSendMessage("Router " + this.routerName, ip, port, message).start();
     }
 }

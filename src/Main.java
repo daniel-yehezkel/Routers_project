@@ -6,7 +6,7 @@ public class Main {
     r1.start();
     r2.start();
 
-    r1.sendMessageToNeighbor("127.0.0.1", r2.portTCP, 1);
-    r2.sendMessageToNeighbor("127.0.0.1", r1.portTCP, 2);
+    r1.sendMessageToNeighbor("127.0.0.1", r2.portTCP, "Hi");
+    r2.sendMessageToNeighbor("127.0.0.1", r1.portTCP, "Bye");
     }
 }
