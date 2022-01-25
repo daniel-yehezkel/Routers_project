@@ -26,9 +26,11 @@ public class UDPServer extends Thread{
 
                 System.out.println(serverName + "_UDP got message:" + data(receive));
 
-                if (data(receive).toString().equals("message")) {
-                    System.out.println("Client sent bye.....EXITING");
-                    break;
+                String message = data(receive).toString();
+                String[] messageParts = message.split(";");
+                if (messageParts.length == 6) {
+                    System.out.println("Client send message of type 6");
+
                 }
                 receive = new byte[4096];
             }
