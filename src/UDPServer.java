@@ -1,13 +1,18 @@
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.io.File;
 
 public class UDPServer extends Thread{
     String serverName;
     int port;
-    public UDPServer(String serverName, int port) {
+    Router r;
+    public UDPServer(String serverName, int port, Router r) {
         this.serverName = serverName;
         this.port = port;
+        this.r = r;
+
     }
 
     public void run(){
@@ -29,6 +34,27 @@ public class UDPServer extends Thread{
                 if (data(receive).toString().equals("message")) {
                     System.out.println("Client sent bye.....EXITING");
                     break;
+                }
+                if (data(receive).toString().equals("PRINT-ROUTING-TABLE")) {
+                    try {
+                        String filename="text_files\\" +"tableFilePrefix"+ r.routerName+".txt";
+                        FileWriter myWriter = new FileWriter(filename,true);
+                        for (int i=1; i<r.routingTable.next.size(); i++) {
+                                myWriter.write(r.routingTable.distance.get(i)+";"+r.routingTable.next.get(i));
+                            if (i != r.routingTable.next.size()-1)
+                                myWriter.write("\n");
+                        }
+                        myWriter.close();
+                        System.out.println("Successfully wrote to the file.");
+                    } catch (IOException e) {
+                        System.out.println("An error occurred.");
+                        e.printStackTrace();
+                    }
+
+
+
+
+
                 }
                 receive = new byte[4096];
             }

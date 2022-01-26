@@ -25,7 +25,7 @@ public class Router extends Thread {
         this.tableFilePrefix = tableFilePrefix;
         this.forwardingFilePrefix = forwardingFilePrefix;
 
-        File inputFile = new File("text_files\\" + inputFilePrefix + ".txt"); //TODO: no 'text_files' in production
+        File inputFile = new File("text_files\\" + inputFilePrefix +this.routerName+".txt"); //TODO: no 'text_files' in production
         try {
             Scanner myReader = new Scanner(inputFile);
             this.portUDP = Integer.parseInt(myReader.nextLine());
@@ -64,7 +64,7 @@ public class Router extends Thread {
         super.run();
         this.myTcpServer = new TCPServer("Router " + this.routerName, this.portTCP);
         this.myTcpServer.start();
-        this.myUdpServer = new UDPServer("Router " + this.routerName, this.portUDP);
+        this.myUdpServer = new UDPServer("Router " + this.routerName, this.portUDP, this);
         this.myUdpServer.start();
     }
 

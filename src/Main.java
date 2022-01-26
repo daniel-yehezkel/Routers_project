@@ -9,7 +9,7 @@ public class Main {
         r1.sendMessageToNeighborTCP("127.0.0.1", r2.portTCP, "Hi");
         r2.sendMessageToNeighborTCP("127.0.0.1", r1.portTCP, "Bye");
 
-        r2.sendMessageToNeighborUDP("127.0.0.1", r1.portUDP, "HEYY");
+        r2.sendMessageToNeighborUDP("127.0.0.1", r1.portUDP, "PRINT-ROUTING-TABLE");
         r2.sendMessageToNeighborUDP("127.0.0.1", r1.portUDP, "fdgsfg");
     }
 }
