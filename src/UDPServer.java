@@ -41,8 +41,12 @@ public class UDPServer extends Thread{
                     try {
                         String filename="text_files\\" +"tableFilePrefix"+ r.routerName+".txt";
                         FileWriter myWriter = new FileWriter(filename,true);
+                        String nexthop;
                         for (int i=1; i<r.routingTable.next.size(); i++) {
-                                myWriter.write(r.routingTable.distance.get(i)+";"+r.routingTable.next.get(i));
+                                nexthop = r.routingTable.next.get(i).toString();
+                                if (Integer.parseInt(nexthop)==r.routerName)
+                                    nexthop="None";
+                                myWriter.write(r.routingTable.distance.get(i)+";"+nexthop);
                             if (i != r.routingTable.next.size()-1)
                                 myWriter.write("\n");
                         }
