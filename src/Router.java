@@ -62,7 +62,7 @@ public class Router extends Thread {
     @Override
     public void run() {
         super.run();
-        this.myTcpServer = new TCPServer("Router " + this.routerName, this.portTCP);
+        this.myTcpServer = new TCPServer("Router " + this.routerName, this.portTCP, this);
         this.myTcpServer.start();
         this.myUdpServer = new UDPServer("Router " + this.routerName, this.portUDP, this);
         this.myUdpServer.start();

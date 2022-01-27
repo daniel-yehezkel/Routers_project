@@ -5,10 +5,12 @@ import java.net.Socket;
 public class TCPServer extends Thread{
     String serverName;
     int port;
+    Router r;
 
-    public TCPServer(String serverName, int port) {
+    public TCPServer(String serverName, int port, Router r) {
         this.serverName = serverName;
         this.port = port;
+        this.r = r;
     }
     public void run(){
         super.run();
@@ -21,7 +23,7 @@ public class TCPServer extends Thread{
                     " is up and waiting for connections on port " + port + "...");
             while (true) {
                 socket = serverSocket.accept();
-                new TCPServerThread(serverName, socket).start();
+                new TCPServerThread(serverName, socket, this.r).start();
             }
         } catch (IOException e) {
             e.printStackTrace();

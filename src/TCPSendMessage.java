@@ -1,3 +1,4 @@
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 
@@ -27,11 +28,14 @@ public class TCPSendMessage extends Thread {
     private void handleWrite() throws Exception {
         Socket socket = new Socket(_toIP, _toPort);
         DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-
-
         System.out.println(_fromRouterName + " Sending " + _message + " to server: " + socket.getInetAddress().toString()
                 + ":" + socket.getPort());
-        output.writeBytes(_message);
+        output.writeUTF(_message);
+
+        // Receive Vector
+        DataInputStream input = new DataInputStream(socket.getInputStream());
+        String msg = input.readUTF();
+        System.out.println("_TCP Received message: " + msg);
 
         output.close();
         socket.close();
