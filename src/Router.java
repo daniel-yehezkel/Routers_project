@@ -17,7 +17,7 @@ public class Router extends Thread {
     RoutingTable routingTable;
     TCPServer myTcpServer;
     UDPServer myUdpServer;
-    boolean flag = false;
+    Integer currentRound;
 
     public Router(int name, String inputFilePrefix, String tableFilePrefix, String
             forwardingFilePrefix) {
@@ -26,6 +26,7 @@ public class Router extends Thread {
         this.routerName = name;
         this.tableFilePrefix = tableFilePrefix;
         this.forwardingFilePrefix = forwardingFilePrefix;
+        this.currentRound = 1;
 
         File inputFile = new File("text_files\\" + inputFilePrefix + this.routerName + ".txt"); //TODO: no 'text_files' in production
         try {
@@ -64,17 +65,22 @@ public class Router extends Thread {
     @Override
     public void run() {
         super.run();
+        updateRoutingTable(1);
         this.myTcpServer = new TCPServer("Router " + this.routerName, this.portTCP, this);
         this.myTcpServer.start();
-        this.myUdpServer = new UDPServer("Router " + this.routerName, this.portUDP, this);
+        this.myUdpServer = new UDPServer("Router " + this.routerName, this.portUDP, this, this.myTcpServer);
         this.myUdpServer.start();
     }
 
-    public String sendMessageToNeighborTCP(String ip, int port, String message) throws Exception {
+    public String sendMessageToNeighborTCP(String ip, int port, String message) {
         TCPSendMessage newMessage = new TCPSendMessage("Router " + this.routerName, ip, port, message);
         newMessage.start();
         while (true) {
-            TimeUnit.SECONDS.sleep(1);
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             if (newMessage.isReturnMessage) {
                 break;
             }
@@ -85,5 +91,20 @@ public class Router extends Thread {
     public void sendMessageToNeighborUDP(String ip, int port, String message) {
         new UDPSendMessage("Router " + this.routerName, ip, port, message);
     }
+
+    public void updateRoutingTable(int roundNumber) {
+        for (Map.Entry<Integer, Neighbor> set : neighborsProperties.entrySet()) {
+            Integer newWeight = CreateInput.weightsMatrix[this.routerName][set.getKey()][roundNumber];
+            Integer oldWeight = this.routingTable.getDistance().get(set.getKey());
+            if (newWeight != -1) {
+                for (int index = 1; index <= this.numNetRouters; index++) {
+                    if (index != this.routerName && this.routingTable.getNext().get(index).equals(set.getKey())) {
+                        this.routingTable.updateDistance(newWeight, oldWeight, index);
+                    }
+                }
+            }
+        }
+    }
+
 }
 

@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+
 public class Neighbor {
+    public ArrayList<Integer> neighborDistanceVector;
     int neighborName;
     String neighborIP;
     int neighborPortUDP;
@@ -11,5 +14,6 @@ public class Neighbor {
         this.neighborPortUDP = neighborPortUDP;
         this.neighborPortTCP = neighborPortTCP;
         this.neighborWeight = neighborWeight;
+        this.neighborDistanceVector = null;
     }
 }
