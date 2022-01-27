@@ -7,12 +7,16 @@ public class TCPSendMessage extends Thread {
     private final String _toIP;
     private final int _toPort;
     private final String _message;
+    boolean isReturnMessage;
+    String returnMessage;
 
     public TCPSendMessage(String fromRouterName, String toIP, int toPort, String message) {
         _fromRouterName = fromRouterName;
         _toIP = toIP;
         _toPort = toPort;
         _message = message;
+        isReturnMessage = false;
+        returnMessage = null;
     }
 
     @Override
@@ -36,6 +40,9 @@ public class TCPSendMessage extends Thread {
         DataInputStream input = new DataInputStream(socket.getInputStream());
         String msg = input.readUTF();
         System.out.println("_TCP Received message: " + msg);
+
+        returnMessage = msg;
+        isReturnMessage = true;
 
         output.close();
         socket.close();

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Router extends Thread {
     int routerName;
@@ -16,16 +17,17 @@ public class Router extends Thread {
     RoutingTable routingTable;
     TCPServer myTcpServer;
     UDPServer myUdpServer;
+    boolean flag = false;
 
     public Router(int name, String inputFilePrefix, String tableFilePrefix, String
             forwardingFilePrefix) {
         this.myTcpServer = null;
-        this.myUdpServer= null;
+        this.myUdpServer = null;
         this.routerName = name;
         this.tableFilePrefix = tableFilePrefix;
         this.forwardingFilePrefix = forwardingFilePrefix;
 
-        File inputFile = new File("text_files\\" + inputFilePrefix +this.routerName+".txt"); //TODO: no 'text_files' in production
+        File inputFile = new File("text_files\\" + inputFilePrefix + this.routerName + ".txt"); //TODO: no 'text_files' in production
         try {
             Scanner myReader = new Scanner(inputFile);
             this.portUDP = Integer.parseInt(myReader.nextLine());
@@ -68,8 +70,16 @@ public class Router extends Thread {
         this.myUdpServer.start();
     }
 
-    public void sendMessageToNeighborTCP(String ip, int port, String message) {
-        new TCPSendMessage("Router " + this.routerName, ip, port, message).start();
+    public String sendMessageToNeighborTCP(String ip, int port, String message) throws Exception {
+        TCPSendMessage newMessage = new TCPSendMessage("Router " + this.routerName, ip, port, message);
+        newMessage.start();
+        while (true) {
+            TimeUnit.SECONDS.sleep(1);
+            if (newMessage.isReturnMessage) {
+                break;
+            }
+        }
+        return newMessage.returnMessage;
     }
 
     public void sendMessageToNeighborUDP(String ip, int port, String message) {

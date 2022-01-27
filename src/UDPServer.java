@@ -56,11 +56,6 @@ public class UDPServer extends Thread{
                         System.out.println("An error occurred.");
                         e.printStackTrace();
                     }
-
-
-
-
-
                 }
                 receive = new byte[4096];
             }
