@@ -14,7 +14,7 @@ public class RoutingTable {
         for (int i = 1; i <= numRouters; i++) {
             if (i == selfName) {
                 distance.add(i, 0);
-                next.add(i, i);
+                next.add(i, null);
             } else {
                 distance.add(i, diamBound);
                 next.add(i, firstNeighbor);

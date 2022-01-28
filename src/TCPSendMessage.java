@@ -32,16 +32,15 @@ public class TCPSendMessage extends Thread {
     private void handleWrite() throws Exception {
         Socket socket = new Socket(_toIP, _toPort);
         DataOutputStream output = new DataOutputStream(socket.getOutputStream());
-        System.out.println(_fromRouterName + " Sending " + _message + " to server: " + socket.getInetAddress().toString()
-                + ":" + socket.getPort());
+//        System.out.println(_fromRouterName + " Sending " + _message + " to server: " + socket.getInetAddress().toString()
+//                + ":" + socket.getPort());
         output.writeUTF(_message);
 
         // Receive Vector
         DataInputStream input = new DataInputStream(socket.getInputStream());
-        String msg = input.readUTF();
-        System.out.println("_TCP Received message: " + msg);
+        //System.out.println("_TCP Received message: " + msg);
 
-        returnMessage = msg;
+        returnMessage = input.readUTF();
         isReturnMessage = true;
 
         output.close();

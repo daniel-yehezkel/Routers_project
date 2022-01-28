@@ -1,9 +1,6 @@
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Router extends Thread {
@@ -18,6 +15,7 @@ public class Router extends Thread {
     TCPServer myTcpServer;
     UDPServer myUdpServer;
     Integer currentRound;
+    ArrayList<ArrayList<Integer>> distVecTime = new ArrayList<>();
 
     public Router(int name, String inputFilePrefix, String tableFilePrefix, String
             forwardingFilePrefix) {
@@ -27,8 +25,10 @@ public class Router extends Thread {
         this.tableFilePrefix = tableFilePrefix;
         this.forwardingFilePrefix = forwardingFilePrefix;
         this.currentRound = 1;
+        distVecTime.add(0, new ArrayList<Integer>());
 
-        File inputFile = new File("text_files\\" + inputFilePrefix + this.routerName + ".txt"); //TODO: no 'text_files' in production
+
+        File inputFile = new File(inputFilePrefix +this.routerName + ".txt"); //TODO: no 'text_files' in production
         try {
             Scanner myReader = new Scanner(inputFile);
             this.portUDP = Integer.parseInt(myReader.nextLine());
@@ -58,7 +58,7 @@ public class Router extends Thread {
             myReader.close();
 
         } catch (IOException e) {
-            System.out.println("Router reading input file ERROR");
+            //System.out.println("Router reading input file ERROR");
         }
     }
 
@@ -93,17 +93,19 @@ public class Router extends Thread {
     }
 
     public void updateRoutingTable(int roundNumber) {
-        for (Map.Entry<Integer, Neighbor> set : neighborsProperties.entrySet()) {
-            Integer newWeight = CreateInput.weightsMatrix[this.routerName][set.getKey()][roundNumber];
-            Integer oldWeight = this.routingTable.getDistance().get(set.getKey());
+        for (Map.Entry<Integer, Neighbor> neighbor : neighborsProperties.entrySet()) {
+            Integer newWeight = CreateInput.weightsMatrix[this.routerName][neighbor.getKey()][roundNumber];
+            Integer oldWeight = neighbor.getValue().oldWeight;
             if (newWeight != -1) {
                 for (int index = 1; index <= this.numNetRouters; index++) {
-                    if (index != this.routerName && this.routingTable.getNext().get(index).equals(set.getKey())) {
+                    if (index != this.routerName && this.routingTable.getNext().get(index).equals(neighbor.getKey())) {
                         this.routingTable.updateDistance(newWeight, oldWeight, index);
                     }
                 }
+                neighbor.getValue().oldWeight=newWeight;
             }
         }
+        distVecTime.add(this.routingTable.distance);
     }
 
 }

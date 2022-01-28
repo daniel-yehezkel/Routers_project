@@ -15,23 +15,41 @@ public class Main {
 
         TimeUnit.SECONDS.sleep(1);
 
-        Router r1 = new Router(1, "input_router_1", "", "");
-        Router r2 = new Router(2, "input_router_2", "", "");
+        Router[] routers = new Router[Constants.NETWORK_SIZE + 1];
+        for (int i = 1; i <= Constants.NETWORK_SIZE; i++)
+        {
+            routers[i] = new Router(i, Constants.ROUTER_INPUT_FILE_PREFIX, Constants.ROUTER_TABLE_OUTPUT_FILE_PREFIX,
+                    Constants.ROUTER_FORWARDING_OUTPUT_FILE_PREFIX);
+            routers[i].start();
+        }
 
-        r1.start();
-        r2.start();
+//        for (int j = 1; j <=20; j++) {
+//            for (int i = 2; i <= Constants.NETWORK_SIZE; i++) {
+//                routers[i-1].sendMessageToNeighborUDP("127.0.0.1", routers[i].portUDP, "UPDATE-ROUTING-TABLE");
+//                TimeUnit.SECONDS.sleep(5);
+//            }
+//            routers[2].sendMessageToNeighborUDP("127.0.0.1", routers[1].portUDP, "UPDATE-ROUTING-TABLE");
+//            System.out.println("Pringting the distances:#################################################################");
+//            System.out.println(routers[1].routingTable.distance);
+//            System.out.println("Pringting the distances:#################################################################");
+//
+//        }
 
-        String a = r1.sendMessageToNeighborTCP("127.0.0.1", r2.portTCP, "2");
-        String b = r2.sendMessageToNeighborTCP("127.0.0.1", r1.portTCP, "1");
+//        Router r1 = new Router(1, "input_router_1", "", "");
+//        Router r2 = new Router(2, "input_router_2", "", "");
+//        r1.start();
+//        r2.start();
 
-        System.out.println(a);
-        System.out.println(b);
+        String m1= "FORWARD" + ";" + 8 + ";" + 3 + ";" + "cat"+ ";"  + "127.0.0.1"+ ";"  + routers[8].portUDP;
+        routers[1].sendMessageToNeighborUDP("127.0.0.1", routers[2].portUDP, m1);
 
-        r2.sendMessageToNeighborUDP("127.0.0.1", r1.portUDP, "SHUT-DOWN");
-        r2.sendMessageToNeighborUDP("127.0.0.1", r2.portUDP, "SHUT-DOWN");
 
-        r2.sendMessageToNeighborUDP("127.0.0.1", r1.portUDP, "HELLO");
-        r2.sendMessageToNeighborTCP("127.0.0.1", r1.portTCP, "HELLO");
+
+        System.out.println("Here");
+
+
+
+
 
     }
 }

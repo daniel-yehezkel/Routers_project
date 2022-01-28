@@ -26,15 +26,15 @@ public class TCPServerThread extends Thread {
     private void handleRead() throws Exception {
         DataInputStream input = new DataInputStream(_socket.getInputStream());
         String msg = input.readUTF();
-        System.out.println(_serverName + "_TCP Received message: " + msg);
+        //System.out.println(_serverName + "_TCP Received message: " + msg);
 
-        System.out.println(_serverName + "got: " + msg);
-        System.out.println("Sending current vector");
+        //System.out.println(_serverName + "got: " + msg);
+        //System.out.println("Sending current vector");
         try {
             DataOutputStream output = new DataOutputStream(_socket.getOutputStream());
-            output.writeUTF(this.r.routingTable.distance.toString());
+            output.writeUTF(this.r.distVecTime.get(Integer.parseInt(msg)).toString());
         } catch (Exception e) {
-            System.out.println("ERROR sending vector");
+            //System.out.println("ERROR sending vector");
             e.printStackTrace();
         }
 

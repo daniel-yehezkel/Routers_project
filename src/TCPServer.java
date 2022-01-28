@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 public class TCPServer extends Thread {
     String serverName;
@@ -27,7 +28,8 @@ public class TCPServer extends Thread {
             while (true) {
                 socket = serverSocket.accept();
                 new TCPServerThread(serverName, socket, this.r).start();
-
+                try{TimeUnit.SECONDS.sleep(5);}
+                catch (Exception e){}
                 if (!this.serverWorks){break;}
             }
         } catch (IOException e) {
